@@ -1,19 +1,10 @@
 import socket
 import json
-from dice_logic import process_request
+from dice import process_request
 from config import HOST, PORT
 
 
 def parse_http_request(request_str):
-    """
-    Parses a raw HTTP request string and extracts the method, path, and body.
-
-    Parameters:
-        request_str (str): The raw HTTP request.
-
-    Returns:
-        tuple: (method, path, body_str)
-    """
     lines = request_str.split('\r\n')
     if not lines:
         return None, None, None
@@ -26,7 +17,6 @@ def parse_http_request(request_str):
     method = request_line[0]
     path = request_line[1]
 
-    # Find body (after the empty line)
     body = ""
     empty_line_found = False
     for line in lines:
@@ -39,16 +29,6 @@ def parse_http_request(request_str):
 
 
 def build_http_response(status_code, body_dict):
-    """
-    Builds a raw HTTP response string with JSON content.
-
-    Parameters:
-        status_code (int): HTTP status code.
-        body_dict (dict): The response body as a dictionary.
-
-    Returns:
-        str: The raw HTTP response string.
-    """
     status_messages = {
         200: "OK",
         400: "Bad Request",
@@ -68,15 +48,6 @@ def build_http_response(status_code, body_dict):
 
 
 def handle_request(request_str):
-    """
-    Handles a full HTTP request and returns an HTTP response string.
-
-    Parameters:
-        request_str (str): The raw HTTP request.
-
-    Returns:
-        str: The raw HTTP response string.
-    """
     method, path, body = parse_http_request(request_str)
 
     if method is None:
@@ -99,10 +70,6 @@ def handle_request(request_str):
 
 
 def run_server():
-    """
-    Starts the HTTP server using Python's socket library.
-    Listens for incoming connections and dispatches requests to the handler.
-    """
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind((HOST, PORT))

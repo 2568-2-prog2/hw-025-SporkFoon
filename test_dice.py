@@ -11,7 +11,7 @@ import os
 # Add the code directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'code'))
 
-from dice_logic import validate_probabilities, generate_biased_rolls, process_request
+from dice import validate_probabilities, generate_biased_rolls, process_request
 
 
 class TestValidateProbabilities(unittest.TestCase):
